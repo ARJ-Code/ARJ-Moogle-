@@ -7,3 +7,4 @@ class Article:
         self.text = article.maintext
         self.language = article.language
         self.summary=''
+        self.named_entities=[]
