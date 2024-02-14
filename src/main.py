@@ -1,4 +1,5 @@
-from news_crawler.analyze import analyze
+from news_crawler.crawler import crawler
+import telebot
 from telebot.types import ReplyKeyboardMarkup
 from telebot.types import ForceReply
 from telebot.types import ReplyKeyboardRemove
@@ -6,10 +7,6 @@ from telebot.types import ReplyKeyboardRemove
 new = "https://www.washingtonpost.com/national-security/2024/02/12/trump-immunity-supreme-court-appeal-jan-6/"
 
 article = crawler(new)
-analyze(article)
-
-
-
 
 bot = telebot.TeleBot("6876084200:AAHTQM2vDcBYZunoFqKFaNzDPdXwZ3y4vd8")
 
