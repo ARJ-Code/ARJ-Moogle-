@@ -1,5 +1,3 @@
-import telebot
-from news_crawler.crawler import crawler
 from news_crawler.analyze import analyze
 from telebot.types import ReplyKeyboardMarkup
 from telebot.types import ForceReply

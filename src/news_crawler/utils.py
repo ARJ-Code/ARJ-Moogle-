@@ -6,5 +6,5 @@ class Article:
         self.description = article.description
         self.text = article.maintext
         self.language = article.language
-        self.summary=''
-        self.named_entities=[]
+        self.summary = ''
+        self.named_entities = []
