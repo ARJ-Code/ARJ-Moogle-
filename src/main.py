@@ -1,10 +1,12 @@
-from news_crawler.crawler import crawler
+from news.process import process
 import telebot
 from telebot.types import ReplyKeyboardMarkup
 from telebot.types import ForceReply
 from telebot.types import ReplyKeyboardRemove
 
 bot = telebot.TeleBot("6876084200:AAHTQM2vDcBYZunoFqKFaNzDPdXwZ3y4vd8")
+
+article = None
 
 
 def build_text(texts):
@@ -24,16 +26,16 @@ def start(message):
         message, "Hello, send us the url of a news item and we will analyze it for you")
 
 
-@bot.message_handler(func=lambda message: message.text.lower() not in ["summary", "descripcion", "autors", "date", "title", "text",
-                                                                       "language", "named entities", "recomendation", "restart"])
+@bot.message_handler(func=lambda message: message.text.lower() not in ["summary", "descripcion", "autors", "date", "title",
+                                                                       "language", "named entities", "recomendation"])
 def analyze(message):
     try:
         global article
-        article = crawler(message.text)
+        article = process(message.text)
 
         markup = ReplyKeyboardMarkup(resize_keyboard=True)
-        markup.add("summary", "descripcion", "autors", "date", "title", "text",
-                   "language", "named entities", "recomendation", "restart")
+        markup.add("summary", "descripcion", "autors", "date", "title",
+                   "language", "named entities", "recomendation")
         bot.reply_to(
             message, "Select what you want to know about the news", reply_markup=markup)
 
@@ -95,20 +97,6 @@ def get_title(message):
         return
 
     bot.reply_to(message, article.title)
-
-
-@bot.message_handler(func=lambda message: message.text.lower() == "text")
-def get_text(message):
-    if article is None:
-        bot.reply_to(message, "Plese select a news")
-        return
-    print(article.text[:100])
-    print(len(
-        article.text) > 100)
-    text = article.text if len(
-        article.text) > 100 else article.text[:100]
-    print(text)
-    bot.reply_to(message, text)
 
 
 @bot.message_handler(func=lambda message: message.text.lower() == "language")

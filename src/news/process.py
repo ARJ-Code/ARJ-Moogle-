@@ -60,7 +60,7 @@ def analyze(article: Article, cant_sentences: int = 3):
                                        for x in doc.ents if x.label_ in interested_labels]))
 
 
-def crawler(url: str, cant_sentences: int = 3, cant_recomendation: int = 3):
+def process(url: str, cant_sentences: int = 3, cant_recomendation: int = 3):
     print(f'Processing html data from url:{url}')
     article_new = NewsPlease.from_url(url)
 

@@ -13,7 +13,7 @@ def tokenize_doc(doc):
         doc.lower()) if token.is_alpha and not token.is_stop]
 
 
-def build_dataset():
+def build_dataset(cant_lines: int = -1):
     print('Load data')
     try:
         f = open('data/data.json')
@@ -22,9 +22,12 @@ def build_dataset():
 
         data = [json.loads(line) for line in lines]
     except:
+        print('Error: no data')
         data = []
 
-    data = data[:10000]
+    if cant_lines > 0:
+        data = data[:cant_lines]
+
     print('Processing data')
     tokenized_docs = [tokenize_doc(
         doc['short_description'].lower()) for doc in data]

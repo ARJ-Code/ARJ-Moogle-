@@ -1,1 +1,1 @@
-# ARJ-Moogle-Plus
+# ARJ-News-Bot
