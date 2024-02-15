@@ -4,8 +4,6 @@ from telebot.types import ReplyKeyboardMarkup
 from telebot.types import ForceReply
 from telebot.types import ReplyKeyboardRemove
 
-article = None
-
 bot = telebot.TeleBot("6876084200:AAHTQM2vDcBYZunoFqKFaNzDPdXwZ3y4vd8")
 
 @bot.message_handler(commands=["help", "start"])
@@ -35,7 +33,7 @@ def analyze(message):
 def get_summary(message):
     if article is None:
         bot.reply_to(message, "Plese select a news")
-        return    
+        return
     bot.reply_to(message,article.summary)
 
 

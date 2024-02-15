@@ -8,3 +8,4 @@ class Article:
         self.language = article.language
         self.summary = ''
         self.named_entities = []
+        self.recomendations = []
