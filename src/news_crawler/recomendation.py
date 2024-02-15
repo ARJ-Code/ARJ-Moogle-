@@ -14,6 +14,7 @@ def tokenize_doc(doc):
 
 
 def build_dataset():
+    print('Load data')
     try:
         f = open('data/data.json')
         lines = f.readlines()
@@ -23,6 +24,8 @@ def build_dataset():
     except:
         data = []
 
+    data = data[:10000]
+    print('Processing data')
     tokenized_docs = [tokenize_doc(
         doc['short_description'].lower()) for doc in data]
 
@@ -32,6 +35,7 @@ def build_dataset():
 
     tfidf = gensim.models.TfidfModel(corpus)
 
+    print('Save data')
     tfidf.save("data/tfidf.model.news")
     dictionary.save("data/dictionary.dict.news")
     vector_repr = [tfidf[doc] for doc in corpus]
@@ -44,7 +48,7 @@ def build_dataset():
     f.close()
 
 
-def recomendation(article: Article,cant_recomendation=3):
+def recomendation(article: Article, cant_recomendation=3):
     # Cargar el modelo TF-IDF y el diccionario
     tfidf = gensim.models.TfidfModel.load("data/tfidf.model.news")
     dictionary = gensim.corpora.Dictionary.load("data/dictionary.dict.news")
@@ -61,7 +65,12 @@ def recomendation(article: Article,cant_recomendation=3):
 
     def cosine_similarity(vec1, vec2):
         vec1, vec2 = dense_vect(vec1), dense_vect(vec2)
-        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+
+        v = np.linalg.norm(vec1) * np.linalg.norm(vec2)
+        if v == 0:
+            return 0
+
+        return np.dot(vec1, vec2) / v
 
     # Preprocesar y tokenizar la consulta
     query_tokens = tokenize_doc(article.text)
@@ -75,6 +84,10 @@ def recomendation(article: Article,cant_recomendation=3):
     # Calcular la similitud entre la consulta y cada documento en el corpus
     similarities = [cosine_similarity(query_tfidf, doc["doc_tfidf"])
                     for doc in data]
+
+    for i in range(len(data)):
+        if not any(p for p in article.authors if data[i]['authors'].lower().find(p.lower())):
+            similarities[i] *= 3/4
 
     # Ordenar las noticias por similitud y seleccionar las más relevantes
     top_n_indices = np.argsort(similarities)[-cant_recomendation:]

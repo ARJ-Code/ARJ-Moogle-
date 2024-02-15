@@ -61,10 +61,14 @@ def analyze(article: Article, cant_sentences: int = 3):
 
 
 def crawler(url: str, cant_sentences: int = 3, cant_recomendation: int = 3):
+    print(f'Processing html data from url:{url}')
     article_new = NewsPlease.from_url(url)
+
+    print('Processing article')
     article = Article(article_new)
 
     analyze(article, cant_sentences)
-    recomendation(article, cant_recomendation)
+    if(article.language=='en'):
+        recomendation(article, cant_recomendation)
 
     return article
