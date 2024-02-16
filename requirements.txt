@@ -1,0 +1,7 @@
+gensim==4.3.2
+networkx==3.2.1
+news_please==1.5.44
+numpy==1.26.4
+pyTelegramBotAPI==4.15.4
+pyTelegramBotAPI==4.15.4
+spacy==3.7.2
