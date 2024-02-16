@@ -1,58 +1,45 @@
 from newsplease import NewsPlease
 import spacy
-from collections import Counter
-from heapq import nlargest
 from .utils import Article
 from .recomendation import recomendation
+from .recomendation import tokenize_doc, cosine_similarity
+import gensim
+from .utils import Article
+import numpy as np
+import networkx as nx
 
 
 def analyze(article: Article, cant_sentences: int = 3):
-    # Cargamos el modelo de lenguaje español pequeño
     nlp = spacy.load('en_core_web_sm') if article.language == 'en'else spacy.load(
         'es_core_news_sm')
 
-    # Analizamos el texto del artículo con spaCy
     doc = nlp(article.text)
 
-    # Inicializamos listas y diccionarios para almacenar palabras clave y frecuencias
-    keyword = []
-    pos_tag = ['PROPN', 'ADJ', 'NOUN', 'VERB']
-    freq_word = Counter()
-    sent_strength = {}
+    sents = [sent for sent in doc.sents]
+    tokenized_sents = [tokenize_doc(sent.text) for sent in doc.sents]
 
-    # Procesamos cada token en el documento
-    for token in doc:
-        # Si el token es una palabra de parada o signo de puntuación, lo saltamos
-        if token.is_stop or not token.is_alpha:
-            continue
-        # Si el token es un nombre propio, adjetivo, sustantivo o verbo, lo añadimos a las palabras clave
-        if token.pos_ in pos_tag:
-            keyword.append(token.lemma_.lower())
+    dictionary = gensim.corpora.Dictionary(tokenized_sents)
 
-    # Contamos la frecuencia de cada palabra clave y normalizamos las frecuencias
-    freq_word = Counter(keyword)
-    max_freq = freq_word.most_common(1)[0][1]
-    for word in freq_word.keys():
-        freq_word[word] = freq_word[word] / max_freq
+    corpus = [dictionary.doc2bow(doc) for doc in tokenized_sents]
 
-    # Calculamos la fuerza de cada frase sumando los pesos relativos de las palabras clave
-    for sent in doc.sents:
-        for word in sent:
-            if word.text.lower() in freq_word.keys():
-                if sent in sent_strength:
-                    sent_strength[sent] += freq_word[word.lemma_.lower()]
-                else:
-                    sent_strength[sent] = freq_word[word.lemma_.lower()]
+    tfidf = gensim.models.TfidfModel(corpus)
 
-    # Seleccionamos las 'cant_sentences' frases más fuertes
-    summarized_sentences = nlargest(
-        cant_sentences, sent_strength, key=sent_strength.get)
+    sim_mat = np.zeros([len(sents), len(sents)])
 
-    # Extraemos las frases seleccionadas y las unimos para formar el resumen
-    final_sentences = [w.text for w in summarized_sentences]
-    article.summary = ' '.join(final_sentences)
+    for i in range(len(sents)):
+        for j in range(len(sents)):
+            if i != j:
+                sim_mat[i][j] = cosine_similarity(
+                    tfidf[corpus[i]], tfidf[corpus[j]], dictionary)
 
-    # Lista de etiquetas de entidad que nos interesan
+    nx_graph = nx.from_numpy_array(sim_mat)
+    scores = nx.pagerank(nx_graph)
+
+    ranked_sents = [s.text for _, s in sorted(((scores[i], s)
+                                               for i, s in enumerate(sents)), reverse=True)]
+
+    article.summary = ' '.join(ranked_sents[:cant_sentences])
+
     interested_labels = ["GPE", "LOC", "ORG", "PERSON"]
 
     # Filtramos las entidades nombradas para quedarnos solo con las de interés
@@ -68,7 +55,7 @@ def process(url: str, cant_sentences: int = 3, cant_recomendation: int = 3):
     article = Article(article_new)
 
     analyze(article, cant_sentences)
-    if(article.language=='en'):
+    if (article.language == 'en'):
         recomendation(article, cant_recomendation)
 
     return article

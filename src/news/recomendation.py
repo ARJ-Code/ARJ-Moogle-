@@ -13,6 +13,20 @@ def tokenize_doc(doc):
         doc.lower()) if token.is_alpha and not token.is_stop]
 
 
+def dense_vect(vect, dictionary):
+    return corpus2dense([vect], len(dictionary)).flatten()
+
+
+def cosine_similarity(vec1, vec2, dictionary):
+    vec1, vec2 = dense_vect(vec1, dictionary), dense_vect(vec2, dictionary)
+
+    v = np.linalg.norm(vec1) * np.linalg.norm(vec2)
+    if v == 0:
+        return 0
+
+    return np.dot(vec1, vec2) / v
+
+
 def build_dataset(cant_lines: int = -1):
     print('Load data')
     try:
@@ -63,18 +77,6 @@ def recomendation(article: Article, cant_recomendation=3):
     except:
         data = []
 
-    def dense_vect(vect):
-        return corpus2dense([vect], len(dictionary)).flatten()
-
-    def cosine_similarity(vec1, vec2):
-        vec1, vec2 = dense_vect(vec1), dense_vect(vec2)
-
-        v = np.linalg.norm(vec1) * np.linalg.norm(vec2)
-        if v == 0:
-            return 0
-
-        return np.dot(vec1, vec2) / v
-
     # Preprocesar y tokenizar la consulta
     query_tokens = tokenize_doc(article.text)
 
@@ -85,7 +87,7 @@ def recomendation(article: Article, cant_recomendation=3):
     query_tfidf = tfidf[query_bow]
 
     # Calcular la similitud entre la consulta y cada documento en el corpus
-    similarities = [cosine_similarity(query_tfidf, doc["doc_tfidf"])
+    similarities = [cosine_similarity(query_tfidf, doc["doc_tfidf"], dictionary)
                     for doc in data]
 
     for i in range(len(data)):

@@ -1,23 +1,12 @@
 from news.process import process
 import telebot
 from telebot.types import ReplyKeyboardMarkup
-from telebot.types import ForceReply
-from telebot.types import ReplyKeyboardRemove
 
 bot = telebot.TeleBot("6876084200:AAHTQM2vDcBYZunoFqKFaNzDPdXwZ3y4vd8")
 
-article = None
-
 
 def build_text(texts):
-    text = ""
-
-    for i in texts:
-        text += '- '
-        text += i
-        text += '\n'
-
-    return text
+    return '\n'.join(['- '+x for x in texts])
 
 
 @bot.message_handler(commands=["help", "start"])
@@ -134,5 +123,4 @@ def get_recomendtion(message):
 
 
 print("Running...")
-bot.polling()
 bot.infinity_polling()
