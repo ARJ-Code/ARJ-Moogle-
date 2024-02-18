@@ -1,4 +1,5 @@
 from news.process import process
+import logging
 import telebot
 from telebot.types import ReplyKeyboardMarkup
 
@@ -122,5 +123,5 @@ def get_recomendtion(message):
     bot.reply_to(message, text)
 
 
-print("Running...")
+logging.info("Running...")
 bot.infinity_polling()

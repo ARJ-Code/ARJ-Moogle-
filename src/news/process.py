@@ -1,4 +1,5 @@
 from newsplease import NewsPlease
+import logging
 import spacy
 from .utils import Article
 from .recomendation import recomendation
@@ -48,10 +49,10 @@ def analyze(article: Article, cant_sentences: int = 3):
 
 
 def process(url: str, cant_sentences: int = 3, cant_recomendation: int = 3):
-    print(f'Processing html data from url:{url}')
+    logging.info(f'Processing html data from url:{url}')
     article_new = NewsPlease.from_url(url)
 
-    print('Processing article')
+    logging.info('Processing article')
     article = Article(article_new)
 
     analyze(article, cant_sentences)
