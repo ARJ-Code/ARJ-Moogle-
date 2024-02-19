@@ -4,6 +4,7 @@ import gensim
 from .utils import Article
 import numpy as np
 from gensim.matutils import corpus2dense
+import logging
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -51,7 +52,7 @@ def build_dataset(cant_lines: int = -1):
     cant_lines: Cantidad de líneas a leer del dataset
     """
 
-    print('Load data')
+    logging.info('Load data')
     try:
         f = open('data/data.json')
         lines = f.readlines()
@@ -59,13 +60,13 @@ def build_dataset(cant_lines: int = -1):
 
         data = [json.loads(line) for line in lines]
     except:
-        print('Error: no data')
+        logging.info('Error: no data')
         data = []
 
     if cant_lines > 0:
         data = data[:cant_lines]
 
-    print('Processing data')
+    logging.info('Processing data')
     tokenized_docs = [tokenize_doc(
         doc['short_description'].lower()) for doc in data]
 
@@ -75,7 +76,7 @@ def build_dataset(cant_lines: int = -1):
 
     tfidf = gensim.models.TfidfModel(corpus)
 
-    print('Save data')
+    logging.info('Save data')
     tfidf.save("data/tfidf.model.news")
     dictionary.save("data/dictionary.dict.news")
     vector_repr = [tfidf[doc] for doc in corpus]
