@@ -9,25 +9,48 @@ nlp = spacy.load('en_core_web_sm')
 
 
 def tokenize_doc(doc):
+    """
+    Función que tokeniza un documento y elimina las palabras vacías
+    doc: Documento a tokenizar
+    """
+
     return [token.lemma_ for token in nlp(
         doc.lower()) if token.is_alpha and not token.is_stop]
 
 
 def dense_vect(vect, dictionary):
+    """
+    Función que convierte un vector disperso en uno denso
+    vect: Vector disperso
+    dictionary: Diccionario que mapea las palabras a su índice
+    """
+
     return corpus2dense([vect], len(dictionary)).flatten()
 
 
-def cosine_similarity(vec1, vec2, dictionary):
-    vec1, vec2 = dense_vect(vec1, dictionary), dense_vect(vec2, dictionary)
+def cosine_similarity(vec_1, vec_2, dictionary):
+    """
+    Función que calcula la similitud coseno entre dos vectores
+    vec_1: Primer vector
+    vec_2: Segundo vector
+    dictionary: Diccionario que mapea las palabras a su índice
+    """
 
-    v = np.linalg.norm(vec1) * np.linalg.norm(vec2)
+    vec_1, vec_2 = dense_vect(vec_1, dictionary), dense_vect(vec_2, dictionary)
+
+    v = np.linalg.norm(vec_1) * np.linalg.norm(vec_2)
     if v == 0:
         return 0
 
-    return np.dot(vec1, vec2) / v
+    return np.dot(vec_1, vec_2) / v
 
 
 def build_dataset(cant_lines: int = -1):
+    """
+    Función que construye el dataset de noticias
+    cant_lines: Cantidad de líneas a leer del dataset
+    """
+
     print('Load data')
     try:
         f = open('data/data.json')
@@ -66,6 +89,12 @@ def build_dataset(cant_lines: int = -1):
 
 
 def recomendation(article: Article, cant_recomendation=3):
+    """
+    Función que recomienda noticias similares a la noticia dada
+    article: Noticia a la que se le quieren recomendar noticias similares
+    cant_recomendation: Cantidad de noticias que se quieren recomendar
+    """
+
     # Cargar el modelo TF-IDF y el diccionario
     tfidf = gensim.models.TfidfModel.load("data/tfidf.model.news")
     dictionary = gensim.corpora.Dictionary.load("data/dictionary.dict.news")
@@ -91,7 +120,7 @@ def recomendation(article: Article, cant_recomendation=3):
                     for doc in data]
 
     for i in range(len(data)):
-        if not any(p for p in article.authors if data[i]['authors'].lower().find(p.lower())):
+        if not any(a for a in article.authors if data[i]['authors'].lower().find(a.lower())):
             similarities[i] *= 3/4
 
     # Ordenar las noticias por similitud y seleccionar las más relevantes
