@@ -3,14 +3,17 @@
 ## Sistema de Extracción de Información de Noticias
 
 ### Autores
+
 - [Raudel Gomez](https://github.com/raudel25) C411.
 - [Juan Carlos Espinosa](https://github.com/Jky45) C411.
 - [Alex Sierra](https://github.com/alexsierra45) C411.
 
 ### Descripción del Problema
+
 El proyecto se centra en la creación de un sistema capaz de extraer información relevante y estructurada de artículos de noticias disponibles en línea. Este sistema debe ser capaz de identificar y presentar datos clave como titulares, autores, fecha de publicación, resumen del contenido, entidades mencionadas (personas, organizaciones, países) y también sugerir otras noticias similares.
 
 ### Consideraciones al Desarrollar la Solución
+
 - Se ha optado por utilizar el lenguaje de programación Python debido a su amplia disponibilidad de bibliotecas especializadas en procesamiento de lenguaje natural y análisis de datos.
 - La solución se divide en varios módulos para facilitar la modularidad y la mantenibilidad del código.
 - Se ha empleado la biblioteca `newsplease` para la extracción de datos de los artículos de noticias, `spacy` para el procesamiento de lenguaje natural, `gensim` para la representación de texto y `networkx` para el cálculo de similitudes entre textos.
@@ -18,7 +21,7 @@ El proyecto se centra en la creación de un sistema capaz de extraer informació
 
 ### Uso de Bot de Telegram como Interfaz Gráfica
 
-El proyecto implementa un bot de Telegram como interfaz gráfica para interactuar con el sistema de extracción de información de noticias. Este enfoque proporciona una forma conveniente y accesible para los usuarios de enviar URLs de artículos de noticias y recibir información relevante de manera interactiva a través de Telegram.
+El proyecto implementa un bot de Telegram como interfaz gráfica para interactuar con el sistema de extracción de información de noticias. Este enfoque proporciona una forma conveniente y accesible para los usuarios de enviar URLs de artículos de noticias y recibir información relevante de manera interactiva a través de Telegram. Puede acceder a este mediante este nick **@arj_sri_bot**.
 
 #### Funcionalidades del Bot
 
@@ -28,12 +31,10 @@ El proyecto implementa un bot de Telegram como interfaz gráfica para interactua
 
 3. **Recomendación de Noticias Similares**: Además de la información del artículo enviado, el bot también puede sugerir otras noticias similares utilizando técnicas de análisis de similitud de texto.
 
-#### Ventajas de Usar un Bot de Telegram 
+#### Ventajas de Usar un Bot de Telegram
 
 - **Accesibilidad**: Telegram es una plataforma popular y ampliamente utilizada, lo que hace que el bot sea fácilmente accesible para una amplia audiencia de usuarios.
-  
 - **Interactividad**: La interfaz de chat proporcionada por Telegram permite una interacción fluida y natural entre el usuario y el sistema, facilitando la comunicación y la comprensión de la información presentada.
-  
 - **Facilidad de Uso**: No se requiere instalar ninguna aplicación adicional, ya que Telegram está disponible en múltiples plataformas, incluyendo dispositivos móviles y de escritorio.
 
 - **Seguridad**: Telegram ofrece un cifrado de extremo a extremo para garantizar la privacidad y seguridad de las conversaciones entre los usuarios y el bot.
@@ -44,38 +45,46 @@ La implementación técnica del bot de Telegram se realiza utilizando la bibliot
 
 En resumen, el uso de un bot de Telegram como interfaz gráfica en el proyecto ofrece una manera conveniente y eficaz de interactuar con el sistema de extracción de información de noticias, permitiendo a los usuarios acceder y obtener información relevante de manera rápida y sencilla a través de la popular plataforma de mensajería.
 
-
 ### Ejecución del Proyecto
+
 Para ejecutar el proyecto en tu entorno local, sigue estos pasos:
 
 1. Instala las dependencias necesarias utilizando `pip` y el archivo `requirements.txt`:
-    ```
-    pip install -r requirements.txt
-    ```
 
-2. Crea una carpeta `data` en el directorio raíz del proyecto para almacenar los datos de los artículos de noticias y descarga la base de datos [en este link](https://www.kaggle.com/rmisra/news-category-dataset):
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. Crea una carpeta `data` en el directorio raíz del proyecto para almacenar los datos de los artículos de noticias y descarga la base de datos de [Kaggle](https://www.kaggle.com/rmisra/news-category-dataset):
 
 3. Descomprime el archivo `archive.zip` descargado y coloca el archivo `News_Category_Dataset_v2.json` con nombre `data.json` en la carpeta `data`.
 
 4. Descarga los modelos de spacy para español e inglés:
-    ```
-    make models
-    ```
+
+   ```
+   make models
+   ```
 
 5. Ejecuta el archivo `build.py` para construir el sistema con los datos descargados y procesados:
-    ```
-    make build
-    ```
+
+   ```
+   make build
+   ```
 
 6. Ejecuta el archivo `main.py` para iniciar el sistema:
-    ```
-    make dev
-    ```
+
+   ```
+   make dev
+   ```
+
+7. Abre el siguiente acceso al [bot](https://t.me/arj_sri_bot)
 
 ### Parámetros de Entrada
+
 El programa espera recibir como entrada la URL de un artículo de noticias en línea. Esta URL puede ser proporcionada por el usuario a través del bot de Telegram.
 
 ### Explicación de la Solución Desarrollada
+
 El sistema implementado utiliza técnicas de procesamiento de lenguaje natural (NLP) y modelos de representación de texto para extraer información relevante de los artículos de noticias. A continuación, se describe brevemente el flujo de trabajo del sistema:
 
 1. **Extracción de Datos**: Se utiliza la biblioteca `newsplease` para obtener datos estructurados de los artículos de noticias a partir de sus URL.
@@ -86,8 +95,9 @@ El sistema implementado utiliza técnicas de procesamiento de lenguaje natural (
 
 4. **Presentación de Resultados**: Finalmente, el sistema presenta al usuario la información extraída de los artículos, incluyendo titulares, autores, fecha de publicación, resumen del contenido, entidades mencionadas y recomendaciones de otras noticias similares.
 
-### Algoritmo de Text Rank
-El algoritmo TextRank es una técnica utilizada para el procesamiento de lenguaje natural que sigue uma idea similar al algoritmo PageRank de Google, adaptado para el análisis de texto en lugar de páginas web. Se utiliza para calcular la importancia relativa de las palabras y oraciones en un texto. Se basa en el concepto de grafos y la idea de que las palabras o frases importantes en un texto estarán conectadas con otras palabras o frases importantes. El algoritmo de Text Rank se utiliza en el proyecto para detectar y resaltar las oraciones más relevantes en los artículos de noticias, y así poder confeccionar el resumen deseado.
+### Algoritmo de TextRank
+
+El algoritmo TextRank es una técnica utilizada para el procesamiento de lenguaje natural que sigue uma idea similar al algoritmo PageRank de Google, adaptado para el análisis de texto en lugar de páginas web. Se utiliza para calcular la importancia relativa de las palabras y oraciones en un texto. Se basa en el concepto de grafos y la idea de que las palabras o frases importantes en un texto estarán conectadas con otras palabras o frases importantes. El algoritmo de TextRank se utiliza en el proyecto para detectar y resaltar las oraciones más relevantes en los artículos de noticias, y así poder confeccionar el resumen deseado.
 
 Después de tener el grafo con las aristas y los pesos relativos a la similitud entre oraciones, el algoritmo de TextRank sigue los siguientes pasos:
 
@@ -122,8 +132,8 @@ function TextRank(G, W, d, max_iter):
     return r
 ```
 
-
 ### Insuficiencias de la Solución y Mejoras Propuestas
+
 A pesar de las funcionalidades implementadas, la solución presenta algunas limitaciones y áreas de mejora potencial:
 
 - **Idioma**: Actualmente, el sistema puede no funcionar correctamente con artículos en idiomas distintos al inglés o español. Se podría explorar la posibilidad de agregar soporte para otros idiomas.
@@ -133,4 +143,3 @@ A pesar de las funcionalidades implementadas, la solución presenta algunas limi
 Se anima a los contribuyentes y usuarios del proyecto a proponer y trabajar en mejoras adicionales que ayuden a hacer el sistema más robusto y efectivo en la extracción de información de noticias en línea.
 
 Para obtener más detalles sobre la implementación y el funcionamiento del sistema, consulte la documentación en el código fuente y siéntase libre de contribuir con sus ideas y sugerencias.
-
