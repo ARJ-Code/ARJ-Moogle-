@@ -48,31 +48,26 @@ En resumen, el uso de un bot de Telegram como interfaz gráfica en el proyecto o
 ### Ejecución del Proyecto
 Para ejecutar el proyecto en tu entorno local, sigue estos pasos:
 
-1. Clona este repositorio en tu máquina local utilizando el siguiente comando:
-    ```
-    git clone https://github.com/ARJ-Code/ARJ-News-Bot
-    ```
-
-2. Accede al directorio del proyecto:
-    ```
-    cd ARJ-News-Bot
-    ```
-
-3. Instala las dependencias necesarias utilizando `pip` y el archivo `requirements.txt`:
+1. Instala las dependencias necesarias utilizando `pip` y el archivo `requirements.txt`:
     ```
     pip install -r requirements.txt
     ```
 
-4. Crea una carpeta `data` en el directorio raíz del proyecto para almacenar los datos de los artículos de noticias y descarga la base de datos [en este link](https://www.kaggle.com/rmisra/news-category-dataset):
+2. Crea una carpeta `data` en el directorio raíz del proyecto para almacenar los datos de los artículos de noticias y descarga la base de datos [en este link](https://www.kaggle.com/rmisra/news-category-dataset):
 
-5. Descomprime el archivo `archive.zip` descargado y coloca el archivo `News_Category_Dataset_v2.json` con nombre `data.json` en la carpeta `data`.
+3. Descomprime el archivo `archive.zip` descargado y coloca el archivo `News_Category_Dataset_v2.json` con nombre `data.json` en la carpeta `data`.
 
-6. Ejecuta el archivo `build.py` para construir el sistema con los datos descargados y procesados:
+4. Descarga los modelos de spacy para español e inglés:
+    ```
+    make models
+    ```
+
+5. Ejecuta el archivo `build.py` para construir el sistema con los datos descargados y procesados:
     ```
     make build
     ```
 
-7. Ejecuta el archivo `main.py` para iniciar el sistema:
+6. Ejecuta el archivo `main.py` para iniciar el sistema:
     ```
     make dev
     ```

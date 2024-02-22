@@ -52,7 +52,7 @@ def analyze(article: Article, cant_sentences: int = 3):
                                                for i, s in enumerate(sents)), reverse=True)]
 
     # Obtenemos el resumen del artículo
-    article.summary = '. '.join(ranked_sents[:cant_sentences])
+    article.summary = ' '.join(ranked_sents[:cant_sentences])
 
     # Obtenemos las entidades nombradas del artículo
     interested_labels = ["GPE", "LOC", "ORG", "PERSON"]
